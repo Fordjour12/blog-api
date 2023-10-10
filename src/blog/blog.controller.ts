@@ -1,11 +1,15 @@
-import { PrismaClientKnownRequestError } from "@prisma/client/runtime/library";
 import { NextFunction, Request, Response } from "express";
-import { allBlogPost, createBlogPost, oneBlogPost } from "./crud.service";
+import {
+    allBlogPost,
+    createBlogPost,
+    deleteOnePost,
+    oneBlogPost,
+} from "./crud.service";
 
 const createNewBlogPost = async (
     request: Request,
     response: Response,
-    next: NextFunction
+    next: NextFunction,
 ) => {
     const { title, content, image, authour } = request.body;
 
@@ -16,19 +20,12 @@ const createNewBlogPost = async (
             image,
             authour,
         });
-
         response.status(201).json({ data: newPost });
     } catch (error) {
-        if (error instanceof PrismaClientKnownRequestError) {
-            if (error.code === "P2002") {
-                return response.status(409).json({
-                    status: "fail",
-                    message: "post already exists",
-                });
-            }
-        }
-        console.error("error:", error);
-        next(error);
+        console.error(error)
+        response.status(500).json({ error: "Error fetching blog posts" });
+        next(error)
+
     }
 };
 
@@ -42,8 +39,8 @@ const getAllBlogPost = async (
         response.json({ data: posts });
     } catch (error) {
         console.error(error);
-        response.status(500).json({ error: 'Error fetching blog posts' });
-        next(error)
+        response.status(500).json({ error: "Error fetching blog posts" });
+        next(error);
     }
 };
 const getBlogPostById = async (
@@ -51,20 +48,19 @@ const getBlogPostById = async (
     response: Response,
     next: NextFunction
 ) => {
-    const { id } = request.params
+    const { id } = request.params;
     try {
-        const post = await oneBlogPost({id})
+        const post = await oneBlogPost({ id });
         if (!post) {
-            return response.status(404).json({ error: 'Blog post not found' });
+            return response.status(404).json({ error: "Blog post not found" });
         }
 
         response.json({ data: post });
     } catch (error) {
         console.error(error);
-        response.status(500).json({ error: 'Error fetching the blog post' });
-        next(error)
+        response.status(500).json({ error: "Error fetching the blog post" });
+        next(error);
     }
-
 };
 
 const updateBlogPost = (
@@ -73,11 +69,29 @@ const updateBlogPost = (
     next: NextFunction
 ) => { };
 
-const deleteBlogPostById = (
+const deleteBlogPostById = async (
     request: Request,
-    respone: Response,
+    response: Response,
     next: NextFunction
-) => { };
+) => {
+    const { id } = request.params;
+
+    try {
+        await deleteOnePost({
+            id,
+        });
+        response.status(204).json({
+            data: {
+                status: "success",
+                message: "Content has been deleted",
+            },
+        });
+    } catch (error) {
+        console.error(error);
+        response.status(500).json({ error: "Error deleting the blog post" });
+        next(error);
+    }
+};
 
 export {
     createNewBlogPost,
