@@ -4,7 +4,7 @@ CREATE TABLE "Blog" (
     "title" TEXT NOT NULL,
     "image" TEXT NOT NULL,
     "content" TEXT NOT NULL,
-    "authour" TEXT NOT NULL,
+    "author" TEXT NOT NULL,
 
     CONSTRAINT "Blog_pkey" PRIMARY KEY ("id")
 );

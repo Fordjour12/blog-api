@@ -50,7 +50,7 @@ Database Configuration
 Set up your database configuration by editing the .env file:
 
 ```javascript
-DATABASE_URL="postgresql://username:password@localhost:5432/database"
+DATABASE_URL="postgresql://username:password@localhost:5432/database?m"
 ```
 
 Replace username, password, localhost, 5432, and database with your actual database connection details.
@@ -74,7 +74,7 @@ Your server will be running at http://localhost:3000.
 
 ## API Endpoints
 
-POST /posts: Create a new blog post.
+POST blog/create: Create a new blog post.
 Request body:
 
 ```json
@@ -86,11 +86,11 @@ Request body:
 }
 ```
 
-GET /posts: Retrieve all blog posts.
+GET blog/posts: Retrieve all blog posts.
 
-GET /posts/:id: Retrieve a specific blog post by ID.
+GET blog/posts/:id: Retrieve a specific blog post by ID.
 
-PUT /posts/:id: Update a specific blog post by ID.
+PUT blog/posts/:id: Update a specific blog post by ID.
 
 Request body:
 
@@ -103,7 +103,7 @@ Request body:
 }
 ```
 
-DELETE /posts/:id: Delete a specific blog post by ID.
+DELETE blog/posts/:id: Delete a specific blog post by ID.
 
 ## Contributing
 

@@ -15,5 +15,5 @@ model Blog {
     title   String
     image   String
     content String
-    authour String
+    author String
 }
