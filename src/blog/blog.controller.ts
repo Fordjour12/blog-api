@@ -14,6 +14,12 @@ const createNewBlogPost = async (
 ) => {
   const { title, content, image, author } = request.body;
 
+  // zod can be used to as a schema validation to caught error
+  if (title === "" || content === "" || image === "" || author === "") {
+    response.status(400).json({ message: "empty content not accepted" });
+    return;
+  }
+
   try {
     const newPost = await createBlogPost({
       title,
